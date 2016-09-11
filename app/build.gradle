@@ -33,3 +33,31 @@ dependencies {
 repositories {
     mavenCentral()
 }
+
+preBuild {
+
+    def text = "<resources>\n" +
+               "    <string name=\"google_maps_key\" translatable=\"false\" templateMergeStrategy=\"preserve\">GOOGLEMAPS_API_KEY</string>\n" +
+               "</resources>"
+
+    def releaseDir = file('src/release/res/values')
+    def releaseExists = new File(releaseDir, "google_maps_api.xml").exists()
+
+    if(!releaseExists) {
+        def file = file("src/release/res/values/google_maps_api.xml")
+        file.createNewFile()
+        def writer = new PrintWriter(file)
+        writer.println(text)
+        writer.close()
+    }
+
+    def debugDir = file('src/debug/res/values')
+    def debugExists = new File(debugDir, "google_maps_api.xml").exists()
+    if(!debugExists) {
+        def file = file("src/debug/res/values/google_maps_api.xml")
+        file.createNewFile()
+        def writer = new PrintWriter(file)
+        writer.println(text)
+        writer.close()
+    }
+}
